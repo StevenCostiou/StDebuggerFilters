@@ -2,7 +2,7 @@
 SUnit test for debugger filters
 "
 Class {
-	#name : #StStackFilterTest,
+	#name : #StDebutterStackFilterTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'context',
@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : #running }
-StStackFilterTest >> setUp [
+StDebutterStackFilterTest >> setUp [
 	super setUp.
 	context := [ (Set with: 1 with: 2) collect: [ :e | e * 2 ]] asContext.
 	process := Process 
@@ -35,7 +35,7 @@ StStackFilterTest >> setUp [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testActivateFilter [
+StDebutterStackFilterTest >> testActivateFilter [
 	|kernelFilter|
 	
 	kernelFilter := StKernelClassesStackFilter new.
@@ -46,7 +46,7 @@ StStackFilterTest >> testActivateFilter [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testBlockFilter [
+StDebutterStackFilterTest >> testBlockFilter [
 	| fromBlockFilter |
 	
 	fromBlockFilter := [ :ctx | ctx isNotNil ] asFilter.
@@ -54,7 +54,7 @@ StStackFilterTest >> testBlockFilter [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testBooleanFilter [
+StDebutterStackFilterTest >> testBooleanFilter [
 	| kernelFilter doItFilter filters booleanFilter |
 	
 	kernelFilter := StKernelClassesStackFilter new.
@@ -65,7 +65,7 @@ StStackFilterTest >> testBooleanFilter [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testDeactivateFilter [
+StDebutterStackFilterTest >> testDeactivateFilter [
 	|kernelFilter|
 	
 	kernelFilter := StKernelClassesStackFilter new.
@@ -77,7 +77,7 @@ StStackFilterTest >> testDeactivateFilter [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testIsActive [
+StDebutterStackFilterTest >> testIsActive [
 	|fromBlockFilter kernelFilter|
 	
 	fromBlockFilter := [ :ctx | ctx isNotNil ] asFilter.
@@ -89,7 +89,7 @@ StStackFilterTest >> testIsActive [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testKernelClassesFilter [
+StDebutterStackFilterTest >> testKernelClassesFilter [
 	| kernelClassesFilter setContext |
 	
 	setContext := session stepInto stepInto stack first.
@@ -100,7 +100,7 @@ StStackFilterTest >> testKernelClassesFilter [
 ]
 
 { #category : #tests }
-StStackFilterTest >> testSelectorFilter [
+StDebutterStackFilterTest >> testSelectorFilter [
 	| doItFilter nilMessagesFilter |
 	
 	doItFilter := StSelectorStackFilter forSelector: #doIt.
