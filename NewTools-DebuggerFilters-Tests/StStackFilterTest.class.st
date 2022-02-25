@@ -10,7 +10,8 @@ Class {
 		'session',
 		'nilContext',
 		'otherProcess',
-		'otherSession'
+		'otherSession',
+		'activeFilters'
 	],
 	#category : #'NewTools-DebuggerFilters-Tests'
 }
@@ -28,7 +29,20 @@ StStackFilterTest >> setUp [
 		forContext: nilContext 
 		priority: Processor userInterruptPriority.
 	otherSession := otherProcess newDebugSessionNamed: 'other session' startedAt: nilContext.
-	otherSession stepInto
+	otherSession stepInto.
+	activeFilters := StDebuggerStackFilter activeStackFilters copy.
+	StDebuggerStackFilter activeStackFilters removeAll
+]
+
+{ #category : #tests }
+StStackFilterTest >> testActivateFilter [
+	|kernelFilter|
+	
+	kernelFilter := StKernelClassesStackFilter new.
+	StDebuggerStackFilter activateFilter: kernelFilter.
+	
+	self assert: (StDebuggerStackFilter isActive: kernelFilter)
+	
 ]
 
 { #category : #tests }
@@ -48,6 +62,30 @@ StStackFilterTest >> testBooleanFilter [
 	filters := OrderedCollection with: kernelFilter with: doItFilter.
 	booleanFilter := StBooleanStackFilter withFilters: filters operator: #or:.
 	self assert: (booleanFilter shouldDisplay: context)
+]
+
+{ #category : #tests }
+StStackFilterTest >> testDeactivateFilter [
+	|kernelFilter|
+	
+	kernelFilter := StKernelClassesStackFilter new.
+	StDebuggerStackFilter activeStackFilters add: kernelFilter.
+	
+	StDebuggerStackFilter deactivateFilter: kernelFilter.
+	self deny: (StDebuggerStackFilter isActive: kernelFilter)
+	
+]
+
+{ #category : #tests }
+StStackFilterTest >> testIsActive [
+	|fromBlockFilter kernelFilter|
+	
+	fromBlockFilter := [ :ctx | ctx isNotNil ] asFilter.
+	kernelFilter := StKernelClassesStackFilter new.
+	StDebuggerStackFilter activeStackFilters add: kernelFilter.
+	
+	self assert: (StDebuggerStackFilter isActive: kernelFilter).
+	self deny: (StDebuggerStackFilter isActive: fromBlockFilter).
 ]
 
 { #category : #tests }
