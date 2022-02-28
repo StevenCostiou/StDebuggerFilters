@@ -5,6 +5,8 @@ I am designed to be used as an extension of the StDebugger.
 Class {
 	#name : #StDebuggerStackFilterPresenter,
 	#superclass : #StPresenter,
+	#traits : 'TStDebuggerExtension',
+	#classTraits : 'TStDebuggerExtension classTrait',
 	#instVars : [
 		'filterTable'
 	],
@@ -86,7 +88,10 @@ StDebuggerStackFilterPresenter >> newDebuggerStackFilter: newFilter [
 
 { #category : #actions }
 StDebuggerStackFilterPresenter >> removeSelectedDebuggerStackFilter [
-	self halt
+
+	StDebuggerStackFilter removeFilter:
+		filterTable selection selectedItem.
+	self updatePresenter
 ]
 
 { #category : #updating }
