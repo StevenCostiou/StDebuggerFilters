@@ -51,12 +51,23 @@ StDebuggerStackFilterPresenter class >> debuggerStackFilterCommandsIn: presenter
 	aCmCommandsGroup register: (self buildRemoveFilterCommand: presenter)
 ]
 
+{ #category : #'debugger extension' }
+StDebuggerStackFilterPresenter class >> defaultDisplayOrder [
+
+	^ -1
+]
+
 { #category : #layout }
 StDebuggerStackFilterPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: #filterTable expand: true fill: true;
 		  yourself
+]
+
+{ #category : #'debugger extension' }
+StDebuggerStackFilterPresenter >> debuggerExtensionToolName [
+	^'Stack filtering'
 ]
 
 { #category : #initialization }
@@ -68,14 +79,17 @@ StDebuggerStackFilterPresenter >> initializePresenters [
 			  title: ' '
 			  evaluated: [ :filter | StDebuggerStackFilter isActive: filter ])
 			 onActivation: [ :filter | 
-				 StDebuggerStackFilter activateFilter: filter ];
+				 StDebuggerStackFilter activateFilter: filter.
+				 self updatePresenter ];
 			 onDeactivation: [ :filter | 
-				 StDebuggerStackFilter deactivateFilter: filter ];
+				 StDebuggerStackFilter deactivateFilter: filter.
+				 self updatePresenter ];
 			 width: 20;
 			 yourself).
 	filterTable addColumn:
 		(SpStringTableColumn title: 'Filter' evaluated: #printString).
-	filterTable items: StDebuggerStackFilter filterCache asOrderedCollection.
+	filterTable items:
+		StDebuggerStackFilter filterCache asOrderedCollection.
 	filterTable contextMenu: self rootCommandsGroup asMenuPresenter
 ]
 
@@ -98,4 +112,16 @@ StDebuggerStackFilterPresenter >> removeSelectedDebuggerStackFilter [
 StDebuggerStackFilterPresenter >> updateFilters [
 	
 	self update
+]
+
+{ #category : #updating }
+StDebuggerStackFilterPresenter >> updatePresenter [
+
+	| stack |
+	filterTable items:
+		StDebuggerStackFilter filterCache asOrderedCollection.
+	stack := self currentDebugger session stack.
+	StDebuggerStackFilter activeStackFilters do: [ :filter | 
+		stack := stack select: [ :context | filter shouldDisplay: context ] ].
+	self currentDebugger updateStack: stack
 ]
