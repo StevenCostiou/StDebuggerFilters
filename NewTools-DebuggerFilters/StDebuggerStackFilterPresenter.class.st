@@ -96,6 +96,6 @@ StDebuggerStackFilterPresenter >> removeSelectedDebuggerStackFilter [
 
 { #category : #updating }
 StDebuggerStackFilterPresenter >> updateFilters [
-"	self halt".
+	
 	self update
 ]
