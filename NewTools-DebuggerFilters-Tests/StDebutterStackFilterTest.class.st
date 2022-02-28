@@ -11,7 +11,8 @@ Class {
 		'nilContext',
 		'otherProcess',
 		'otherSession',
-		'activeFilters'
+		'activeFilters',
+		'filterCache'
 	],
 	#category : #'NewTools-DebuggerFilters-Tests'
 }
@@ -31,7 +32,17 @@ StDebutterStackFilterTest >> setUp [
 	otherSession := otherProcess newDebugSessionNamed: 'other session' startedAt: nilContext.
 	otherSession stepInto.
 	activeFilters := StDebuggerStackFilter activeStackFilters copy.
-	StDebuggerStackFilter activeStackFilters removeAll
+	StDebuggerStackFilter activeStackFilters: nil.
+	filterCache := StDebuggerStackFilter filterCache copy.
+	StDebuggerStackFilter filterCache: nil
+]
+
+{ #category : #running }
+StDebutterStackFilterTest >> tearDown [
+
+	StDebuggerStackFilter activeStackFilters: activeFilters.
+	StDebuggerStackFilter filterCache: filterCache.
+	super tearDown
 ]
 
 { #category : #tests }
@@ -41,7 +52,8 @@ StDebutterStackFilterTest >> testActivateFilter [
 	kernelFilter := StKernelClassesStackFilter new.
 	StDebuggerStackFilter activateFilter: kernelFilter.
 	
-	self assert: (StDebuggerStackFilter isActive: kernelFilter)
+	self assert: (StDebuggerStackFilter isActive: kernelFilter).
+	self assert: StDebuggerStackFilter filterCache asArray first identicalTo: kernelFilter
 	
 ]
 
@@ -65,6 +77,21 @@ StDebutterStackFilterTest >> testBooleanFilter [
 ]
 
 { #category : #tests }
+StDebutterStackFilterTest >> testCacheFilter [
+
+	| kernelFilter |
+	kernelFilter := StKernelClassesStackFilter new.
+	StDebuggerStackFilter cacheFilter: kernelFilter.
+	self assert: StDebuggerStackFilter filterCache size equals: 1.
+	self
+		assert: StDebuggerStackFilter filterCache asArray first
+		identicalTo: kernelFilter.
+
+	StDebuggerStackFilter cacheFilter: kernelFilter.
+	self assert: StDebuggerStackFilter filterCache size equals: 1
+]
+
+{ #category : #tests }
 StDebutterStackFilterTest >> testDeactivateFilter [
 	|kernelFilter|
 	
@@ -74,6 +101,22 @@ StDebutterStackFilterTest >> testDeactivateFilter [
 	StDebuggerStackFilter deactivateFilter: kernelFilter.
 	self deny: (StDebuggerStackFilter isActive: kernelFilter)
 	
+]
+
+{ #category : #tests }
+StDebutterStackFilterTest >> testDeactivateFilterKeepsFilterInCache [
+	|kernelFilter|
+	
+	kernelFilter := StKernelClassesStackFilter new.
+	StDebuggerStackFilter activateFilter: kernelFilter.	
+	StDebuggerStackFilter deactivateFilter: kernelFilter.
+	self assert: StDebuggerStackFilter filterCache asArray first identicalTo: kernelFilter
+	
+]
+
+{ #category : #tests }
+StDebutterStackFilterTest >> testFilterCache [
+	self assert: StDebuggerStackFilter filterCache isEmpty
 ]
 
 { #category : #tests }
@@ -97,6 +140,19 @@ StDebutterStackFilterTest >> testKernelClassesFilter [
 	self assert: (kernelClassesFilter shouldDisplay: context).
 	self assert: (kernelClassesFilter shouldDisplay: nilContext).
 	self deny: (kernelClassesFilter shouldDisplay: setContext)
+]
+
+{ #category : #tests }
+StDebutterStackFilterTest >> testRemoveFilter [
+	|kernelFilter|
+	
+	kernelFilter := StKernelClassesStackFilter new.
+	StDebuggerStackFilter activateFilter: kernelFilter.	
+	StDebuggerStackFilter removeFilter: kernelFilter.
+	
+	self assert: StDebuggerStackFilter activeStackFilters isEmpty.
+	self assert: StDebuggerStackFilter filterCache isEmpty
+	
 ]
 
 { #category : #tests }
