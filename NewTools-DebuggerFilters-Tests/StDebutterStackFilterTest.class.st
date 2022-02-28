@@ -143,6 +143,18 @@ StDebutterStackFilterTest >> testKernelClassesFilter [
 ]
 
 { #category : #tests }
+StDebutterStackFilterTest >> testPackageFilter [
+	| packageFilter setContext |
+	
+	packageFilter := StPackageStackFilter forPackagesNames: #('Collections-Abstract').
+	setContext := session stepInto stepInto stack first.
+	
+	self assert: (packageFilter shouldDisplay: context).
+	self assert: (packageFilter shouldDisplay: nilContext).
+	self deny: (packageFilter shouldDisplay: setContext)
+]
+
+{ #category : #tests }
 StDebutterStackFilterTest >> testRemoveFilter [
 	|kernelFilter|
 	

@@ -49,5 +49,6 @@ StPackageStackFilter >> printOn: aStream [
 { #category : #testing }
 StPackageStackFilter >> shouldDisplay: aContext [
 
-	^ aContext method methodClass package name ~= self packageName
+	^ (self packagesNames includes:
+		   aContext method methodClass package name) not
 ]
