@@ -25,6 +25,16 @@ StBlockStackFilter >> block: aBlockClosure [
 	block:= aBlockClosure
 ]
 
+{ #category : #printing }
+StBlockStackFilter >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream space.
+	aStream << 'block:'.
+	aStream space.
+	aStream << block method ast sourceCode
+]
+
 { #category : #testing }
 StBlockStackFilter >> shouldDisplay: aContext [
 	 ^self block value: aContext

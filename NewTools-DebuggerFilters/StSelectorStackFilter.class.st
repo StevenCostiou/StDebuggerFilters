@@ -34,6 +34,14 @@ StSelectorStackFilter >> initialize [
 	self selectors: OrderedCollection new.
 ]
 
+{ #category : #printing }
+StSelectorStackFilter >> printOn: aStream [
+	super printOn: aStream.
+	aStream space.
+	aStream << 'selector: #'.
+	aStream << selectors first asSymbol
+]
+
 { #category : #accessing }
 StSelectorStackFilter >> selectors [
  	^selectors

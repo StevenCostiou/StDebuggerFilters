@@ -45,6 +45,14 @@ StKernelClassesStackFilter >> kernelClassesToExclude [
 	MessageSend}
 ]
 
+{ #category : #printing }
+StKernelClassesStackFilter >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream space.
+	aStream << 'kernel classes'
+]
+
 { #category : #testing }
 StKernelClassesStackFilter >> shouldDisplay: aContext [
 	^ (kernelClasses includes: aContext receiver class) not

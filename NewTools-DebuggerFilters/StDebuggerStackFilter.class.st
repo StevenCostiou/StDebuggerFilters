@@ -85,6 +85,12 @@ StDebuggerStackFilter >> or: aFilter [
 	  ^ StBooleanStackFilter withFilters: (OrderedCollection with: self with: aFilter) operator: #or:
 ]
 
+{ #category : #printing }
+StDebuggerStackFilter >> printOn: aStream [
+	aStream << 'Filter'
+
+]
+
 { #category : #testing }
 StDebuggerStackFilter >> shouldDisplay: aContext [
 	^self subclassResponsibility 
