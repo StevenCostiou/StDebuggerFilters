@@ -7,6 +7,7 @@ StDebugger >> addPackageFilterFromStackSelection [
 	contextSelection := self selectedContext.
 	selectedContextPackageName := contextSelection method package name asString.
 	filter := StPackageStackFilter forPackagesNames: (OrderedCollection with: selectedContextPackageName).
+	filter filterIn.
 	StDebuggerStackFilter activateFilter: filter.
 	self updateExtensions
 ]
