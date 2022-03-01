@@ -14,15 +14,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-StDebuggerStackFilterPresenter class >> buildAddFilterCommand: presenter [
-
-	| cmd |
-	cmd := StAddDebuggerStackFilterCommand forSpecContext: presenter.
-	cmd iconName: #smallAdd.
-	^ cmd
-]
-
-{ #category : #'as yet unclassified' }
 StDebuggerStackFilterPresenter class >> buildAddFilterCommand: cmdClass in: presenter [
 
 	| cmd |
@@ -45,8 +36,8 @@ StDebuggerStackFilterPresenter class >> debuggerStackFilterCommandsIn: presenter
 
 	<extensionCommands>
 	StAddDebuggerStackFilterCommand subclasses do: [ :c | 
-		aCmCommandsGroup register:
-			(self buildAddFilterCommand: c in: presenter) ].
+		aCmCommandsGroup register: (c filterOutForSpecContext: presenter).
+		aCmCommandsGroup register: (c filterForSpecContext: presenter) ].
 
 	aCmCommandsGroup register: (self buildRemoveFilterCommand: presenter)
 ]
@@ -97,7 +88,8 @@ StDebuggerStackFilterPresenter >> initializePresenters [
 StDebuggerStackFilterPresenter >> newDebuggerStackFilter: newFilter [
 	StDebuggerStackFilter activateFilter: newFilter.
 	filterTable items add: newFilter.
-	self updateFilters
+	self updateFilters.
+	self updatePresenter 
 ]
 
 { #category : #actions }
@@ -122,6 +114,6 @@ StDebuggerStackFilterPresenter >> updatePresenter [
 		StDebuggerStackFilter filterCache asOrderedCollection.
 	stack := self currentDebugger session stack.
 	StDebuggerStackFilter activeStackFilters do: [ :filter | 
-		stack := stack select: [ :context | filter shouldDisplay: context ] ].
+		stack := stack select: [ :context | filter evaluateFor: context ] ].
 	self currentDebugger updateStack: stack
 ]

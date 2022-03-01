@@ -41,5 +41,6 @@ StDebugger >> updateExtensions [
 StDebugger >> updateStack: aStack [
 
 	stackTable items: aStack.
+	aStack ifEmpty:[ ^self].
 	stackTable selectIndex: 1 scrollToSelection: true
 ]

@@ -28,6 +28,14 @@ StBooleanStackFilter >> booleanOperator: aSymbol [
 	booleanOperator:= aSymbol
 ]
 
+{ #category : #testing }
+StBooleanStackFilter >> evaluateFor: aContext [
+
+	^ (self filters first evaluateFor: aContext)
+		  perform: booleanOperator
+		  with: [ self filters last evaluateFor: aContext ]
+]
+
 { #category : #accessing }
 StBooleanStackFilter >> filters [
 	^filters

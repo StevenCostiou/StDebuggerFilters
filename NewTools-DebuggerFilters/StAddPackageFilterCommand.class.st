@@ -8,11 +8,6 @@ Class {
 	#category : #'NewTools-DebuggerFilters-presenters'
 }
 
-{ #category : #accessing }
-StAddPackageFilterCommand >> name [ 
-	^'Filter package'
-]
-
 { #category : #executing }
 StAddPackageFilterCommand >> newFilter [
 
@@ -27,4 +22,9 @@ StAddPackageFilterCommand >> newFilter [
 
 	^ StPackageStackFilter forPackagesNames:
 		  (chooser chosenItems collect: [ :p | p name asString ])
+]
+
+{ #category : #accessing }
+StAddPackageFilterCommand >> targetFilter [ 
+	^'package'
 ]

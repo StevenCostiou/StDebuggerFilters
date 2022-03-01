@@ -8,11 +8,6 @@ Class {
 	#category : #'NewTools-DebuggerFilters-presenters'
 }
 
-{ #category : #accessing }
-StAddBlockFilterCommand >> name [ 
-	^'Filter block'
-]
-
 { #category : #executing }
 StAddBlockFilterCommand >> newFilter [
 
@@ -23,4 +18,9 @@ StAddBlockFilterCommand >> newFilter [
 		          title: 'Create block stack filter'.
 	block := Smalltalk compiler evaluate: source.
 	^ StBlockStackFilter forBlock: block
+]
+
+{ #category : #accessing }
+StAddBlockFilterCommand >> targetFilter [
+	^'block'
 ]

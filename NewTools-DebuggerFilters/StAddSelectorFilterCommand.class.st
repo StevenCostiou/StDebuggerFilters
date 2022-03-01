@@ -8,11 +8,6 @@ Class {
 	#category : #'NewTools-DebuggerFilters-presenters'
 }
 
-{ #category : #accessing }
-StAddSelectorFilterCommand >> name [ 
-	^'Filter selector'
-]
-
 { #category : #executing }
 StAddSelectorFilterCommand >> newFilter [
 
@@ -23,4 +18,9 @@ StAddSelectorFilterCommand >> newFilter [
 		            title: 'Create selector stack filter'.
 
 	^ StSelectorStackFilter forSelector: selector asSymbol
+]
+
+{ #category : #accessing }
+StAddSelectorFilterCommand >> targetFilter [ 
+	^'selector'
 ]

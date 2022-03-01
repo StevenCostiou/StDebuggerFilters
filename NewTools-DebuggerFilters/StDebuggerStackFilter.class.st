@@ -5,7 +5,8 @@ Class {
 	#name : #StDebuggerStackFilter,
 	#superclass : #Object,
 	#instVars : [
-		'stack'
+		'stack',
+		'filteringStrategy'
 	],
 	#classInstVars : [
 		'isActive',
@@ -80,6 +81,26 @@ StDebuggerStackFilter >> and: aFilter [
 	  ^ StBooleanStackFilter withFilters: (OrderedCollection with: self with: aFilter) operator: #and:
 ]
 
+{ #category : #evaluating }
+StDebuggerStackFilter >> evaluateFor: aContext [
+	^self filteringStrategy evaluate: self for: aContext
+]
+
+{ #category : #operators }
+StDebuggerStackFilter >> filterIn [
+	filteringStrategy := StDebuggerStackFilterStrategy new
+]
+
+{ #category : #operators }
+StDebuggerStackFilter >> filterOut [
+	filteringStrategy := StDebuggerStackFilterOutStrategy new
+]
+
+{ #category : #accessing }
+StDebuggerStackFilter >> filteringStrategy [
+	^filteringStrategy ifNil:[self filterOut]
+]
+
 { #category : #operators }
 StDebuggerStackFilter >> or: aFilter [
 	  ^ StBooleanStackFilter withFilters: (OrderedCollection with: self with: aFilter) operator: #or:
@@ -87,7 +108,8 @@ StDebuggerStackFilter >> or: aFilter [
 
 { #category : #printing }
 StDebuggerStackFilter >> printOn: aStream [
-	aStream << 'Filter'
+	aStream << 'Filter'.
+	self filteringStrategy printOn: aStream
 
 ]
 
